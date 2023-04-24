@@ -27,11 +27,14 @@ public class CustomerValaidation {
     public static Validation<String> isAlpha(String c){
         return SimpleValidation.from((s) -> StringUtils.isAlpha(s), format("must not be contain %s", c));
     }
+    public static Validation<String> isAlphaSpace(String c){
+        return SimpleValidation.from((s) -> StringUtils.isAlphaSpace(s), format("must not be contain %s", c));
+    }
 
 
     public boolean validate(CustomerPojo customerDataPojo) {
         System.out.println("VALIDATE : " + customerDataPojo.getName());
-        notNull.and(isAlpha(customerDataPojo.getName())).test(customerDataPojo.getName()).throwIfInvalid("firstname");
+        notNull.and(isAlphaSpace(customerDataPojo.getName())).test(customerDataPojo.getName()).throwIfInvalid("firstname");
         notNull.test(customerDataPojo.getPermanentAddress()).throwIfInvalid("Address");
         notNull.and(isNumeric(String.valueOf(customerDataPojo.getMobileNo()))).and(between(10,15)).test(String.valueOf(customerDataPojo.getMobileNo())).throwIfInvalid("mobile No");
         notNull.and(isNumeric(String.valueOf(customerDataPojo.getPin()))).and(between(6,6)).test(String.valueOf(customerDataPojo.getPin())).throwIfInvalid("Pin");
