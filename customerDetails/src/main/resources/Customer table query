@@ -1,0 +1,26 @@
+-- Table: public.customer
+
+-- DROP TABLE IF EXISTS public.customer;
+
+CREATE TABLE IF NOT EXISTS public.customer
+(
+    customer_id uuid NOT NULL,
+    name character varying COLLATE pg_catalog."default" NOT NULL,
+    permanent_address character varying COLLATE pg_catalog."default" NOT NULL,
+    communication_address character varying COLLATE pg_catalog."default",
+    city character varying COLLATE pg_catalog."default",
+    state character varying COLLATE pg_catalog."default",
+    district character varying COLLATE pg_catalog."default",
+    country character varying COLLATE pg_catalog."default",
+    phone_no bigint,
+    mobile_no bigint NOT NULL,
+    pin integer,
+    dob date,
+    CONSTRAINT customer_id_pky PRIMARY KEY (customer_id),
+    CONSTRAINT mobile_no_unique UNIQUE (mobile_no)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.customer
+    OWNER to postgres;
