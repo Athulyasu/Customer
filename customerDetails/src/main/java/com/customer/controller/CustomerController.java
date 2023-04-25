@@ -31,20 +31,25 @@ public class CustomerController {
             Customer customerData=customerConverter.convertToEntityDomain(customerDataPojo);
             customerservice.saveOrUpdate(customerData);
             if(customerDataPojo==null) throw new ApiRequestException("customerDataPojo not found");
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.ok().build();
+        else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
     @PatchMapping(value = "/updateCustomer")
     public ResponseEntity<String> updateCustomerData(
             @RequestParam(name = "customer_id") String customer_id,
             @RequestParam(name = "name") String name) {
-        
         Optional<Customer> customerData=customerservice.finById(UUID.fromString(customer_id));
         if(customerData.isPresent()) {
             Customer customerUpdatedData=customerData.get();
             customerUpdatedData.setName(name);
             customerservice.saveOrUpdate(customerUpdatedData);
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.ok().build();
+        else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
