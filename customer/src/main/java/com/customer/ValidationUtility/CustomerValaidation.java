@@ -1,9 +1,9 @@
-package com.customer.controller;
+package com.customer.ValidationUtility;
 
 
-import com.customer.pojo.CustomerPojo;
-import org.apache.commons.lang3.StringUtils;
+import com.customer.DTO.CustomerPojo;
 import org.springframework.stereotype.Component;
+import org.apache.commons.lang3.StringUtils;
 
 import static java.lang.String.format;
 @Component
@@ -12,11 +12,11 @@ public class CustomerValaidation {
     public static Validation<String> notNull = SimpleValidation.from((s) -> s != null, "must not be null.");
 
     public static Validation<String> moreThan(int size){
-        return SimpleValidation.from((s) -> s.length() >= size, format("must be greater than %s chars.", size));
+        return SimpleValidation.from((s) -> s.length() >= size, format("must be equal to %s .", size));
     }
 
     public static Validation<String> lessThan(int size){
-        return SimpleValidation.from((s) -> s.length() <= size, format("must be less than %s chars.", size));
+        return SimpleValidation.from((s) -> s.length() <= size, format("must be equal to %s .", size));
     }
     public static Validation<String> between(int minSize, int maxSize){
         return moreThan(minSize).and(lessThan(maxSize));
@@ -30,7 +30,7 @@ public class CustomerValaidation {
 
 
     public boolean validate(CustomerPojo customerDataPojo) {
-        System.out.println("VALIDATE");
+        System.out.println("VALIDATE : " + customerDataPojo.getName());
         notNull.and(isAlpha(customerDataPojo.getName())).test(customerDataPojo.getName()).throwIfInvalid("firstname");
         notNull.test(customerDataPojo.getPermanentAddress()).throwIfInvalid("Address");
         notNull.and(isNumeric(String.valueOf(customerDataPojo.getMobileNo()))).and(between(10,15)).test(String.valueOf(customerDataPojo.getMobileNo())).throwIfInvalid("mobile No");

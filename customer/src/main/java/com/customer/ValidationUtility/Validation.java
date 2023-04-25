@@ -1,4 +1,4 @@
-package com.customer.controller;
+package com.customer.ValidationUtility;
 @FunctionalInterface
 public interface Validation<K> {
     ValidationResult test(K param);

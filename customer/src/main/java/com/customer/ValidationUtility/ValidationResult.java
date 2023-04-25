@@ -1,4 +1,4 @@
-package com.customer.controller;
+package com.customer.ValidationUtility;
 
 public class ValidationResult {
     private boolean valid;
