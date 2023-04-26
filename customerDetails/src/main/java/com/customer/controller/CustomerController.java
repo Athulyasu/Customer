@@ -25,7 +25,7 @@ public class CustomerController {
     CustomerValaidation customervalidation;
     @PostMapping(value = "/saveCustomer")
     public ResponseEntity<String> saveCustomerData(
-            final @RequestBody CustomerPojo customerDataPojo) {
+            @Valid @RequestBody CustomerPojo customerDataPojo) {
         if(customervalidation.validate(customerDataPojo)) {
             CustomerConverter customerConverter=new CustomerConverter();
             Customer customerData=customerConverter.convertToEntityDomain(customerDataPojo);
