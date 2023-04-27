@@ -15,6 +15,17 @@ public class CustomerService {
         customerrepository.save(customerdata);
     }
 
+    public Optional<Customer> finById(UUID customer_id) {
+        return customerrepository.findById(customer_id);
+    }
+
+    public void delete(UUID customer_id) {
+
+        boolean exists= customerrepository.existsById(customer_id);
+        if(! exists){throw new IllegalStateException("Customer with id " + customer_id +"does not exists");
+        }
+        customerrepository.deleteById(customer_id);
+    }
 
 
 

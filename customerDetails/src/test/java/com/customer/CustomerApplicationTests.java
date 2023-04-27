@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = CustomerValaidation.class)
 class CustomerApplicationTests {
@@ -27,26 +27,60 @@ class CustomerApplicationTests {
 	//Mock the service which is to be tested (Can't be a interface)
 	@InjectMocks
 	CustomerService customerService;
-
+	//	@Mock
+//	CustomerService customerService;
 	@Test
 	void testValidate()  {
 		CustomerPojo customerPojo = setCustomerData();
-//		assertThrows(IllegalArgumentException.class, () -> customervalidation.validate(customerPojo),
-//				"Error in customer data ");
-//		assertFalse(customervalidation.validate(customerPojo));
+		//check the function with incorrect data
+		assertThrows(IllegalArgumentException.class, () -> customervalidation.validate(customerPojo),
+				"Error in customer data ");
+		assertFalse(customervalidation.validate(customerPojo));
 
-		customerPojo.setName("sdfsf");
-		customerPojo.setDistrict("TVM");
-		assertTrue(customervalidation.validate(customerPojo));
+//		customerPojo.setName("TEST");
+//		customerPojo.setDistrict("TVM");
+//		assertTrue(customervalidation.validate(customerPojo));
 
 	}
 
+	@Test
+	public void testValidateSave()  {
+		when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
+		customerService.saveOrUpdate(buildCustomerData());
+		verify(customerRepository, times(1)).save(any(Customer.class));
+	}
 	@Test
 	public void testValidateOptional()  {
 		Customer customerPojo = buildCustomerData();
 		when(customerRepository.findById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"))).
 				thenReturn(Optional.of(customerPojo));
 		assertNotNull(customerService.finById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614")));
+
+		when(customerRepository.findById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a6861"))).
+				thenReturn(null);
+		assertNull(customerService.finById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a6861")));
+	}
+
+	@Test
+	public void testValidateDelete()  {
+
+		//check existing id false
+		when(customerRepository.existsById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68610"))).
+				thenReturn(false);
+		assertThrows(Exception.class, () -> customerService.delete(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68610")),
+				"Error in customer id ");
+		//check existing id true
+		when(customerRepository.existsById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"))).
+				thenReturn(true);
+		doNothing().when(customerRepository).deleteById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+
+		//verify method calling
+		customerService.delete(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+		verify(customerRepository, times(1)).
+				deleteById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+//		verify(customerService, times(1)).
+//				delete(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+
 	}
 
 	private CustomerPojo setCustomerData() {

@@ -52,4 +52,10 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @DeleteMapping(path = "/deleteCustomer")
+    public ResponseEntity<String> deleteCustomer(@RequestParam(name = "customer_id") String customer_id){
+        customerservice.delete(UUID.fromString(customer_id));
+        if(customer_id==null) throw new ApiRequestException("id not found");
+        return ResponseEntity.ok().build();
+    }
 }
