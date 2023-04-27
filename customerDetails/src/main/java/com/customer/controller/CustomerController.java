@@ -31,7 +31,8 @@ public class CustomerController {
             Customer customerData=customerConverter.convertToEntityDomain(customerDataPojo);
             customerservice.saveOrUpdate(customerData);
             if(customerDataPojo==null) throw new ApiRequestException("customerDataPojo not found");
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>("Customer successfully Saved!", HttpStatus.OK);
+//            return ResponseEntity.ok().build();
         }
         else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -41,12 +42,12 @@ public class CustomerController {
     public ResponseEntity<String> updateCustomerData(
             @RequestParam(name = "customer_id") String customer_id,
             @RequestParam(name = "name") String name) {
-        Optional<Customer> customerData=customerservice.finById(UUID.fromString(customer_id));
+        Optional<Customer> customerData=customerservice.findById(UUID.fromString(customer_id));
         if(customerData.isPresent()) {
             Customer customerUpdatedData=customerData.get();
             customerUpdatedData.setName(name);
             customerservice.saveOrUpdate(customerUpdatedData);
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>("Customer successfully Updated!", HttpStatus.OK);        
         }
         else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -55,7 +56,13 @@ public class CustomerController {
     @DeleteMapping(path = "/deleteCustomer")
     public ResponseEntity<String> deleteCustomer(@RequestParam(name = "customer_id") String customer_id){
         customerservice.delete(UUID.fromString(customer_id));
-        if(customer_id==null) throw new ApiRequestException("id not found");
-        return ResponseEntity.ok().build();
+        if(customer_id==null) throw new ApiRequestException("customer_id not found");
+        return new ResponseEntity<>("Customer successfully Deleted!", HttpStatus.OK);
+    }
+    @GetMapping(path = "/getCustomer")
+    public ResponseEntity<Customer> getCustomer(@RequestParam(name = "customer_id") String customer_id){
+        Customer customerData=customerservice.findById(UUID.fromString(customer_id)).get();
+        if(customer_id==null) throw new ApiRequestException("customer_id not found");
+        return new ResponseEntity<>(customerData, HttpStatus.OK);
     }
 }

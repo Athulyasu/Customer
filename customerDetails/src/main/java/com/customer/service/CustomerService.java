@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+
+
 public class CustomerService {
 
     @Autowired
@@ -15,7 +17,7 @@ public class CustomerService {
         customerrepository.save(customerdata);
     }
 
-    public Optional<Customer> finById(UUID customer_id) {
+    public Optional<Customer> findById(UUID customer_id) {
         return customerrepository.findById(customer_id);
     }
 

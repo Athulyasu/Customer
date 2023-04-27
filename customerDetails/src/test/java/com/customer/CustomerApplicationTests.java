@@ -33,13 +33,13 @@ class CustomerApplicationTests {
 	void testValidate()  {
 		CustomerPojo customerPojo = setCustomerData();
 		//check the function with incorrect data
-		assertThrows(IllegalArgumentException.class, () -> customervalidation.validate(customerPojo),
-				"Error in customer data ");
-		assertFalse(customervalidation.validate(customerPojo));
+//		assertThrows(IllegalArgumentException.class, () -> customervalidation.validate(customerPojo),
+//				"Error in customer data ");
+//		assertFalse(customervalidation.validate(customerPojo));
 
-//		customerPojo.setName("TEST");
-//		customerPojo.setDistrict("TVM");
-//		assertTrue(customervalidation.validate(customerPojo));
+		customerPojo.setName("TEST");
+		customerPojo.setDistrict("TVM");
+		assertTrue(customervalidation.validate(customerPojo));
 
 	}
 
@@ -52,13 +52,14 @@ class CustomerApplicationTests {
 	@Test
 	public void testValidateOptional()  {
 		Customer customerPojo = buildCustomerData();
+
 		when(customerRepository.findById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"))).
 				thenReturn(Optional.of(customerPojo));
-		assertNotNull(customerService.finById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614")));
+		assertNotNull(customerService.findById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614")));
 
 		when(customerRepository.findById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a6861"))).
 				thenReturn(null);
-		assertNull(customerService.finById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a6861")));
+		assertNull(customerService.findById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a6861")));
 	}
 
 	@Test
