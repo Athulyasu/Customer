@@ -1,17 +1,16 @@
 package com.customer;
 import com.customer.ValidationUtility.CustomerValaidation;
-import com.customer.DTO.CustomerPojo;
+import com.customer.DTO.CustomerDTO;
 import com.customer.model.Customer;
 import com.customer.repository.CustomerRepository;
 import com.customer.service.CustomerService;
+import org.hibernate.validator.internal.util.Contracts;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,7 +30,7 @@ class CustomerApplicationTests {
 //	CustomerService customerService;
 	@Test
 	void testValidate()  {
-		CustomerPojo customerPojo = setCustomerData();
+		CustomerDTO customerPojo = setCustomerData();
 		//check the function with incorrect data
 //		assertThrows(IllegalArgumentException.class, () -> customervalidation.validate(customerPojo),
 //				"Error in customer data ");
@@ -50,7 +49,7 @@ class CustomerApplicationTests {
 		verify(customerRepository, times(1)).save(any(Customer.class));
 	}
 	@Test
-	public void testValidateOptional()  {
+	public void testOptional()  {
 		Customer customerPojo = buildCustomerData();
 
 		when(customerRepository.findById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"))).
@@ -63,7 +62,7 @@ class CustomerApplicationTests {
 	}
 
 	@Test
-	public void testValidateDelete()  {
+	public void testDelete()  {
 
 		//check existing id false
 		when(customerRepository.existsById(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68610"))).
@@ -83,9 +82,22 @@ class CustomerApplicationTests {
 //				delete(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
 
 	}
+	@Test
+	public void testsearchCustomers()  {
 
-	private CustomerPojo setCustomerData() {
-		CustomerPojo customerPojo = new CustomerPojo();
+		List<Customer> customer= new ArrayList<Customer>();
+		when(customerRepository.searchCustomers("A")).
+				thenReturn(Collections.singletonList(buildCustomerData()));
+		assertNotNull(customerService.findCustomers("A"));
+
+		when(customerRepository.searchCustomers(anyString())).
+				thenReturn(null);
+		assertNull(customerRepository.searchCustomers(anyString()));
+
+	}
+
+	private CustomerDTO setCustomerData() {
+		CustomerDTO customerPojo = new CustomerDTO();
 		Date date=new Date();
 		customerPojo.setName("Anu A");
 		customerPojo.setPermanentAddress("TEST ADDRESS");
@@ -118,4 +130,5 @@ class CustomerApplicationTests {
 		Customer.setCountry("INDIA");
 		return Customer;
 	}
+
 }
