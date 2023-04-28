@@ -86,13 +86,13 @@ class CustomerApplicationTests {
 	public void testsearchCustomers()  {
 
 		List<Customer> customer= new ArrayList<Customer>();
-		when(customerRepository.searchCustomers("A")).
+		when(customerRepository.findByName("A")).
 				thenReturn(Collections.singletonList(buildCustomerData()));
 		assertNotNull(customerService.findCustomers("A"));
 
-		when(customerRepository.searchCustomers(anyString())).
+		when(customerRepository.findByName(anyString())).
 				thenReturn(null);
-		assertNull(customerRepository.searchCustomers(anyString()));
+		assertNull(customerRepository.findByName(anyString()));
 
 	}
 
@@ -130,5 +130,23 @@ class CustomerApplicationTests {
 		Customer.setCountry("INDIA");
 		return Customer;
 	}
-
+	private List<CustomerDTO> buildCustomerDtoData() {
+		List<CustomerDTO> dtolist=new ArrayList<CustomerDTO>();
+		CustomerDTO Customer = new CustomerDTO();
+		Date date=new Date();
+		Customer.setCustomerId(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+		Customer.setName("Anu A");
+		Customer.setPermanentAddress("TEST ADDRESS");
+		Customer.setCommunicationAddress("DEMO ADDRESS");
+		Customer.setCity("ATTINGAL");
+		Customer.setDistrict("TVM");
+		Customer.setDob(date);
+		Customer.setState("KERALA");
+		Customer.setPhoneNo(98745615L);
+		Customer.setMobileNo(8512346310L);
+		Customer.setPin(611295);
+		Customer.setCountry("INDIA");
+		dtolist.add(Customer);
+		return dtolist;
+	}
 }

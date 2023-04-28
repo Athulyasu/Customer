@@ -36,7 +36,7 @@ public class CustomerService {
         }
         else
         {
-            customerlist= customerrepository.searchCustomers(customer_name);
+            customerlist= customerrepository.findByName(customer_name);
         }
         System.out.println("size"+customerlist);
         return customerlist.stream()
