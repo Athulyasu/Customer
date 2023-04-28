@@ -65,4 +65,10 @@ public class CustomerController {
         if(customer_id==null) throw new ApiRequestException("customer_id not found");
         return new ResponseEntity<>(customerData, HttpStatus.OK);
     }
+    @GetMapping(path = "/getAllCustomer")
+    public ResponseEntity<List<CustomerDTO>> getAllCustomer(@RequestParam(name = "name") String name){
+        List<CustomerDTO> customerlist=customerservice.findCustomers(name);
+        return new ResponseEntity<>(customerlist, HttpStatus.OK);
+    }
+
 }
