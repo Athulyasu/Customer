@@ -1,5 +1,8 @@
 package com.customer.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,6 +14,9 @@ import java.util.UUID;
         uniqueConstraints=
         @UniqueConstraint(columnNames={"mobileNo"})
 )
+@NoArgsConstructor
+@Setter
+@Getter
 public class Customer {
 
 
@@ -37,7 +43,7 @@ public class Customer {
     private int pin;
     private Date dob;
 
-
+/*
     public UUID getCustomerId() {
         return customerId;
     }
@@ -130,5 +136,5 @@ public class Customer {
 
     public void setCountry(String country) {
         this.country = country;
-    }
+    }*/
 }

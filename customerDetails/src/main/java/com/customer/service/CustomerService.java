@@ -9,11 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.customer.DTO.CustomerDTO;
+import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@NoArgsConstructor
 public class CustomerService {
 
     @Autowired

@@ -1,12 +1,19 @@
 package com.customer.DTO;
 
 
+import com.customer.model.Customer;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 import java.util.Date;
-
-public class CustomerPojo
+@Setter
+@Getter
+public class CustomerDTO
 {
     @NotNull
     @Pattern(regexp = "^[A-Za-z\\s,\\.]*$")
@@ -29,7 +36,7 @@ public class CustomerPojo
     private Date dob;
     @NotNull
     private long mobileNo;
-
+    private UUID customerId;
 
     public String getName() {
         return name;
@@ -113,4 +120,14 @@ public class CustomerPojo
     public void setCountry(String country) {
         this.country = country;
     }
+
+
+    public UUID getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(UUID customerId) {
+        this.customerId = customerId;
+    }
+
 }

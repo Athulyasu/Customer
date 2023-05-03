@@ -1,9 +1,16 @@
 package com.customer.ValidationUtility;
 
 
-import com.customer.DTO.CustomerPojo;
+import com.customer.DTO.CustomerDTO;
+import com.customer.DTO.TelephonebillDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.apache.commons.lang3.StringUtils;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import static java.lang.String.format;
 @Component
@@ -32,7 +39,7 @@ public class CustomerValaidation {
     }
 
 
-    public boolean validate(CustomerPojo customerDataPojo) {
+    public boolean validate(CustomerDTO customerDataPojo) {
         System.out.println("VALIDATE : " + customerDataPojo.getName());
         notNull.and(isAlphaSpace(customerDataPojo.getName())).test(customerDataPojo.getName()).throwIfInvalid("firstname");
         notNull.test(customerDataPojo.getPermanentAddress()).throwIfInvalid("Address");
@@ -50,6 +57,5 @@ public class CustomerValaidation {
         return true;
 
     }
-
 }
 
