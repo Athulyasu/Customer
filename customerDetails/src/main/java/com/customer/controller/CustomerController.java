@@ -1,6 +1,7 @@
 package com.customer.controller;
 
 import com.customer.DTO.CustomerDTO;
+import com.customer.DTO.TelephonebillDTO;
 import com.customer.ValidationUtility.CustomerValaidation;
 import com.customer.exceptionHandler.ApiRequestException;
 import com.customer.model.Customer;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 @RequestMapping(path = "/v1/customer")
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+//@CrossOrigin(origins = "http://localhost:8080")
 public class CustomerController {
 
     @Autowired
@@ -30,14 +31,15 @@ public class CustomerController {
     @Autowired
     CustomerValaidation customervalidation;
     @PostMapping(value = "/saveCustomer")
-    public ResponseEntity<String> saveCustomerData(
-            @Valid @RequestBody CustomerPojo customerDataPojo) {
+    public ResponseEntity<CustomerDTO> saveCustomerData(
+            @Valid @RequestBody CustomerDTO customerDataPojo) {
+        CustomerDTO savedDtoData = new CustomerDTO();
         if(customervalidation.validate(customerDataPojo)) {
-            CustomerConverter customerConverter=new CustomerConverter();
-            Customer customerData=customerConverter.convertToEntityDomain(customerDataPojo);
-            customerservice.saveOrUpdate(customerData);
+            EntityConverter entityConverter =new EntityConverter();
+            Customer customerData= entityConverter.convertToEntityDomain(customerDataPojo);
+            savedDtoData=customerservice.saveOrUpdate(customerData);
             if(customerDataPojo==null) throw new ApiRequestException("customerDataPojo not found");
-            return new ResponseEntity<>("Customer successfully Saved!", HttpStatus.OK);
+            return new ResponseEntity<>(savedDtoData, HttpStatus.OK);
 //            return ResponseEntity.ok().build();
         }
         else{
@@ -45,16 +47,18 @@ public class CustomerController {
         }
     }
     @PatchMapping(value = "/updateCustomer")
-    public ResponseEntity<String> updateCustomerData(
+    public ResponseEntity<CustomerDTO> updateCustomerData(
             @RequestParam(name = "customer_id") String customer_id,
-            @RequestParam(name = "name") String name) {
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "permanentAdd") String permanentAdd) {
         Optional<Customer> customerData=customerservice.findById(UUID.fromString(customer_id));
+        CustomerDTO savedDtoData = new CustomerDTO();
         if(customerData.isPresent()) {
             Customer customerUpdatedData=customerData.get();
             customerUpdatedData.setName(name);
-            customerservice.saveOrUpdate(customerUpdatedData);
-            return new ResponseEntity<>("Customer successfully Updated!", HttpStatus.OK);        
-        }
+            customerUpdatedData.setPermanentAddress(permanentAdd);
+            savedDtoData=customerservice.saveOrUpdate(customerUpdatedData);
+            return new ResponseEntity<>(savedDtoData, HttpStatus.OK);        }
         else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

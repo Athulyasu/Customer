@@ -110,7 +110,21 @@ class CustomerApplicationTests {
 	@Test
 	public void testValidateBillSave()  {
 		when(telephonebillRepository.save(any(Telephonebill.class))).thenReturn(new Telephonebill());
-		telephonebillService.saveOrUpdate(setBillData());
+
+		// create a sample Telephonebill object to save
+		Telephonebill telephonebill = setBillData();
+
+		// create a sample TelephonebillDTO object to return
+		TelephonebillDTO telephonebillDTO = setBillDtoData();
+
+		// mock the save method of the repository to return the sample Telephonebill object
+		when(telephonebillRepository.save(telephonebill)).thenReturn(telephonebill);
+
+		// call the service method and verify the returned TelephonebillDTO object
+		TelephonebillDTO result = telephonebillService.saveOrUpdate(telephonebill);
+		assertEquals(telephonebillDTO.getBillId(), result.getBillId());
+		assertEquals(telephonebillDTO.getUsageInMb(), result.getUsageInMb());
+
 		verify(telephonebillRepository, times(1)).save(any(Telephonebill.class));
 	}
 	@Test
@@ -199,14 +213,20 @@ class CustomerApplicationTests {
 		return dtolist;
 	}
 	private Telephonebill setBillData() {
-		Telephonebill Telephonebill = new Telephonebill();
-		Date date=new Date();
-		Customer customer=new Customer();
-		customer.setCustomerId(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
-		Telephonebill.setCustomer(customer);
-		Telephonebill.setBillDate(date);
-		Telephonebill.setUsageInMb(110.9);
-		return Telephonebill;
+		Telephonebill telephonebill = new Telephonebill();
+		telephonebill.setBillId(5);
+		telephonebill.setUsageInMb(110.9);
+		telephonebill.setBillDate(new Date());
+		telephonebill.setCustomer(buildCustomerData());
+		return telephonebill;
+	}
+	private TelephonebillDTO setBillDtoData() {
+		TelephonebillDTO telephonebillDTO = new TelephonebillDTO();
+		telephonebillDTO.setBillId(5);
+		telephonebillDTO.setUsageInMb(110.9);
+		telephonebillDTO.setBillDate(new Date());
+		telephonebillDTO.setCustomerId(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+		return telephonebillDTO;
 	}
 	private Page<Telephonebill> setBillDataPAge() {
 		Telephonebill Telephonebill = new Telephonebill();

@@ -1,5 +1,7 @@
 package com.customer.service;
 
+import com.customer.DTO.TelephonebillDTO;
+import com.customer.model.Telephonebill;
 import com.customer.repository.CustomerRepository;
 import com.customer.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +12,22 @@ import com.customer.DTO.CustomerDTO;
 
 import java.util.Optional;
 import java.util.UUID;
+
 @Service
 public class CustomerService {
 
     @Autowired
     CustomerRepository customerrepository;
 
-    public void saveOrUpdate(Customer customerdata) {
-        customerrepository.save(customerdata);
-    }
+    public CustomerDTO saveOrUpdate(Customer customerdata) {
 
+        EntityConverter entityConverter =new EntityConverter();
+        Customer savedcustomer=customerrepository.save(customerdata);
+        // Convert User JPA entity to UserDto
+        CustomerDTO csutomerDtoData = entityConverter.convertToCustomerDtoDomain(savedcustomer);
+
+        return csutomerDtoData;
+    }
     public Optional<Customer> findById(UUID customer_id) {
         return customerrepository.findById(customer_id);
     }

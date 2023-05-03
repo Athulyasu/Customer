@@ -1,5 +1,6 @@
 package com.customer.service;
 
+import com.customer.DTO.TelephonebillDTO;
 import com.customer.model.Telephonebill;
 import com.customer.repository.TelephonebillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -16,8 +15,15 @@ public class TelephonebillService {
     @Autowired
     TelephonebillRepository telephonebillRepository;
 
-    public void saveOrUpdate(Telephonebill TelephonebillData) {
-        telephonebillRepository.save(TelephonebillData);
+    public TelephonebillDTO saveOrUpdate(Telephonebill TelephonebillData) {
+
+        EntityConverter entityConverter =new EntityConverter();
+
+        Telephonebill savedBill=telephonebillRepository.save(TelephonebillData);
+        // Convert User JPA entity to UserDto
+        TelephonebillDTO TelephonebillDtoData = entityConverter.convertToDtoDomain(savedBill);
+
+        return TelephonebillDtoData;
     }
     public Optional<Telephonebill> findById(int bill_id) {
         return telephonebillRepository.findById(bill_id);

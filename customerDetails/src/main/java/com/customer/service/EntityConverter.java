@@ -28,7 +28,33 @@ public class EntityConverter {
         customer.setCountry(customerPojo.getCountry());
         return customer;
     }
-
+    public CustomerDTO convertToCustomerDtoDomain(Customer Customer)
+    {
+        CustomerDTO CustomerDTO=new CustomerDTO();
+        CustomerDTO.setName(Customer.getName());
+        CustomerDTO.setPermanentAddress(Customer.getPermanentAddress());
+        CustomerDTO.setCommunicationAddress(Customer.getCommunicationAddress());
+        CustomerDTO.setCity(Customer.getCity());
+        CustomerDTO.setDistrict(Customer.getDistrict());
+        CustomerDTO.setDob(Customer.getDob());
+        CustomerDTO.setState(Customer.getState());
+        CustomerDTO.setPhoneNo(Customer.getPhoneNo());
+        CustomerDTO.setMobileNo(Customer.getMobileNo());
+        CustomerDTO.setPin(Customer.getPin());
+        CustomerDTO.setCountry(Customer.getCountry());
+        CustomerDTO.setCustomerId(Customer.getCustomerId());
+        return CustomerDTO;
+    }
+    public TelephonebillDTO convertToBillDtoDomain(Telephonebill Telephonebilldata)
+    {
+        TelephonebillDTO telephonebillData=new TelephonebillDTO();
+        System.out.println("Telephonebilldata"+Telephonebilldata.getUsageInMb());
+        telephonebillData.setCustomerId(Telephonebilldata.getCustomer().getCustomerId());
+        telephonebillData.setUsageInMb(Telephonebilldata.getUsageInMb());
+        telephonebillData.setBillDate(Telephonebilldata.getBillDate());
+        telephonebillData.setBillId(Telephonebilldata.getBillId());
+        return telephonebillData;
+    }
     public Telephonebill convertToTelephoneBillEntityDomain(TelephonebillDTO telephonebillData,Customer customerData)
     {
         Telephonebill telephonebill=new Telephonebill();
