@@ -1,0 +1,17 @@
+CREATE TABLE IF NOT EXISTS public.telephonebill
+(
+    bill_id integer NOT NULL DEFAULT nextval('telephonebill_bill_id_seq'::regclass),
+    customer_id uuid NOT NULL,
+    bill_date date,
+    usage_in_mb double precision,
+    CONSTRAINT bill_id_pkey PRIMARY KEY (bill_id),
+    CONSTRAINT customer_id_fkey FOREIGN KEY (customer_id)
+        REFERENCES public.customer (customer_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.telephonebill
+    OWNER to postgres;
