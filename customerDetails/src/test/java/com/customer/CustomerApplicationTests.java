@@ -1,14 +1,22 @@
 package com.customer;
+import com.customer.DTO.TelephonebillDTO;
 import com.customer.ValidationUtility.CustomerValaidation;
 import com.customer.DTO.CustomerDTO;
 import com.customer.model.Customer;
+import com.customer.model.Telephonebill;
 import com.customer.repository.CustomerRepository;
+import com.customer.repository.TelephonebillRepository;
 import com.customer.service.CustomerService;
+import com.customer.service.TelephonebillService;
 import org.hibernate.validator.internal.util.Contracts;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageImpl;
 
 import java.util.*;
 
@@ -22,7 +30,10 @@ class CustomerApplicationTests {
 	CustomerValaidation customervalidation;
 	@Mock
 	CustomerRepository customerRepository;
-
+	@Mock
+	TelephonebillRepository telephonebillRepository;
+	@InjectMocks
+	TelephonebillService telephonebillService;
 	//Mock the service which is to be tested (Can't be a interface)
 	@InjectMocks
 	CustomerService customerService;
@@ -85,16 +96,54 @@ class CustomerApplicationTests {
 	@Test
 	public void testsearchCustomers()  {
 
-		List<Customer> customer= new ArrayList<Customer>();
-		when(customerRepository.findByName("A")).
-				thenReturn(Collections.singletonList(buildCustomerData()));
-		assertNotNull(customerService.findCustomers("A"));
+		PageRequest pageRequest = PageRequest.of(1, 1, Sort.Direction.ASC,"billDate");
 
-		when(customerRepository.findByName(anyString())).
+		when(customerRepository.findByName("A",pageRequest)).
+				thenReturn(buildCustomerPagedData());
+		assertNotNull(customerService.findCustomers("A",pageRequest));
+
+		when(customerRepository.findByName("XX",pageRequest)).
 				thenReturn(null);
-		assertNull(customerRepository.findByName(anyString()));
+		assertNull(customerRepository.findByName("XX",pageRequest));
 
 	}
+	@Test
+	public void testValidateBillSave()  {
+		when(telephonebillRepository.save(any(Telephonebill.class))).thenReturn(new Telephonebill());
+		telephonebillService.saveOrUpdate(setBillData());
+		verify(telephonebillRepository, times(1)).save(any(Telephonebill.class));
+	}
+	@Test
+	public void testBillOptional()  {
+		Telephonebill Telephonebill = setBillData();
+
+		when(telephonebillRepository.findById(2)).
+				thenReturn(Optional.of(Telephonebill));
+		assertNotNull(telephonebillService.findById(2));
+
+		when(telephonebillRepository.findById(1)).
+				thenReturn(null);
+		assertNull(telephonebillService.findById(1));
+	}
+
+	@Test
+	public void testsearchCustomerBill()  {
+
+		PageRequest pageRequest = PageRequest.of(1, 1, Sort.Direction.ASC,"billDate");
+
+		when(telephonebillRepository.findBillByNameAndDate("VISHNU","2021-10-10",pageRequest)).
+				thenReturn(setBillDataPAge());
+		assertNotNull(telephonebillService.findCustomerBill("VISHNU","2021-10-10",pageRequest));
+
+
+		when(telephonebillRepository.findBillByNameAndDate("XX","2023-10-10",pageRequest)).
+				thenReturn(null);
+		assertNull(telephonebillService.findCustomerBill("XX","2023-10-10",pageRequest));
+
+	}
+
+
+
 
 	private CustomerDTO setCustomerData() {
 		CustomerDTO customerPojo = new CustomerDTO();
@@ -149,4 +198,57 @@ class CustomerApplicationTests {
 		dtolist.add(Customer);
 		return dtolist;
 	}
+	private Telephonebill setBillData() {
+		Telephonebill Telephonebill = new Telephonebill();
+		Date date=new Date();
+		Customer customer=new Customer();
+		customer.setCustomerId(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+		Telephonebill.setCustomer(customer);
+		Telephonebill.setBillDate(date);
+		Telephonebill.setUsageInMb(110.9);
+		return Telephonebill;
+	}
+	private Page<Telephonebill> setBillDataPAge() {
+		Telephonebill Telephonebill = new Telephonebill();
+		List<Telephonebill> TelephonebillList = new ArrayList<Telephonebill>();
+		int page=0;
+		int size=1;
+		Sort.Direction order= Sort.Direction.ASC;
+		Date date=new Date();
+		Customer customer=new Customer();
+		customer.setCustomerId(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+		Telephonebill.setCustomer(customer);
+		Telephonebill.setBillDate(date);
+		Telephonebill.setUsageInMb(110.9);
+		TelephonebillList.add(Telephonebill);
+		PageRequest pageable = PageRequest.of(page, size,order ,"billDate");
+		Page<Telephonebill> pages = new PageImpl<Telephonebill>(TelephonebillList, pageable, TelephonebillList.size());
+		return pages;
+	}
+	private Page<Customer> buildCustomerPagedData() {
+		List<Customer> CustomerList = new ArrayList<Customer>();
+		int page=0;
+		int size=1;
+		Sort.Direction order= Sort.Direction.ASC;
+		Customer Customer = new Customer();
+		Date date=new Date();
+		Customer.setCustomerId(UUID.fromString("0233b6f0-f7e1-4268-8b7f-808ff8a68614"));
+		Customer.setName("Anu A");
+		Customer.setPermanentAddress("TEST ADDRESS");
+		Customer.setCommunicationAddress("DEMO ADDRESS");
+		Customer.setCity("ATTINGAL");
+		Customer.setDistrict("TVM");
+		Customer.setDob(date);
+		Customer.setState("KERALA");
+		Customer.setPhoneNo(98745615L);
+		Customer.setMobileNo(8512346310L);
+		Customer.setPin(611295);
+		Customer.setCountry("INDIA");
+		CustomerList.add(Customer);
+		PageRequest pageable = PageRequest.of(page, size,order ,"billDate");
+		Page<Customer> pages = new PageImpl<Customer>(CustomerList, pageable, CustomerList.size());
+		return pages;
+	}
+
+
 }

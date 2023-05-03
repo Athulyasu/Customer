@@ -1,16 +1,22 @@
 package com.customer.controller;
 
-import com.customer.DTO.CustomerPojo;
+import com.customer.DTO.CustomerDTO;
 import com.customer.ValidationUtility.CustomerValaidation;
 import com.customer.exceptionHandler.ApiRequestException;
 import com.customer.model.Customer;
-import com.customer.service.CustomerConverter;
+import com.customer.service.EntityConverter;
 import com.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -66,8 +72,13 @@ public class CustomerController {
         return new ResponseEntity<>(customerData, HttpStatus.OK);
     }
     @GetMapping(path = "/getAllCustomer")
-    public ResponseEntity<List<CustomerDTO>> getAllCustomer(@RequestParam(name = "name") String name){
-        List<CustomerDTO> customerlist=customerservice.findCustomers(name);
+    public ResponseEntity<Page<Customer>> getAllCustomer(@RequestParam(name = "name") String name,
+                     final Sort.Direction order,
+                     final int page,
+                     final int size){
+//        List<CustomerDTO> customerlist=customerservice.findCustomers(name);
+        PageRequest pageRequest = PageRequest.of(page, size, order,"dob");
+        Page<Customer> customerlist=customerservice.findCustomers(name, pageRequest);
         return new ResponseEntity<>(customerlist, HttpStatus.OK);
     }
 

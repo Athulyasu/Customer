@@ -3,11 +3,14 @@ package com.customer.service;
 import com.customer.repository.CustomerRepository;
 import com.customer.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.customer.DTO.CustomerDTO;
 
+import java.util.Optional;
+import java.util.UUID;
 @Service
-
-
 public class CustomerService {
 
     @Autowired
@@ -28,20 +31,21 @@ public class CustomerService {
         }
         customerrepository.deleteById(customer_id);
     }
-    public List<CustomerDTO> findCustomers(String customer_name) {
-        List<Customer> customerlist=new ArrayList<Customer>();
-        if(customer_name.equals(null))
+    public Page<Customer> findCustomers(String customer_name,Pageable pageRequest) {
+        Page<Customer> customerlist = null;
+        if(customer_name.equals(null) || customer_name.equals("null"))
         {
-            customerlist= customerrepository.findAll();
+            customerlist= customerrepository.findAllCustomer(pageRequest);
         }
         else
         {
-            customerlist= customerrepository.findByName(customer_name);
+            customerlist= customerrepository.findByName(customer_name,pageRequest);
         }
-        System.out.println("size"+customerlist);
-        return customerlist.stream()
-                .map(CustomerService::buildUserDetails)
-                .collect(Collectors.toList());
+        System.out.println("size"+customerlist.getTotalElements());
+//        return customerlist.stream()
+//                .map(CustomerService::buildUserDetails)
+//                .collect(Collectors.toList());
+        return customerlist;
     }
 
     public static CustomerDTO buildUserDetails(

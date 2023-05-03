@@ -44,7 +44,12 @@ public class CustomerValaidation {
         notNull.and(isAlpha(customerDataPojo.getState())).test(customerDataPojo.getState()).throwIfInvalid("State");
         return true;
     }
+    public boolean validateBill(TelephonebillDTO Telephonebill) {
+        Objects.requireNonNull(Telephonebill.getCustomerId(), "Customer ID is required");
+        Objects.requireNonNull(Telephonebill.getUsageInMb(), "Data Usage is required in MB");
+        return true;
 
+    }
 
 }
 
