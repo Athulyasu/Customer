@@ -1,8 +1,11 @@
 package com.customer.DTO;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.UUID;
 
+@Data
 public class TelephonebillDTO {
     private UUID customerId;
     private Date billDate;

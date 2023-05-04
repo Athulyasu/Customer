@@ -1,8 +1,16 @@
 package com.customer.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="telephonebill")
 public class Telephonebill {
@@ -18,35 +26,4 @@ public class Telephonebill {
     private Date billDate;
     private Double usageInMb;
 
-    public Double getUsageInMb() {
-        return usageInMb;
-    }
-
-    public void setUsageInMb(Double usageInMb) {
-        this.usageInMb = usageInMb;
-    }
-
-    public Integer getBillId() {
-        return billId;
-    }
-
-    public void setBillId(Integer billId) {
-        this.billId = billId;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Date getBillDate() {
-        return billDate;
-    }
-
-    public void setBillDate(Date billDate) {
-        this.billDate = billDate;
-    }
 }

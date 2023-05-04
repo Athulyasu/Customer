@@ -1,18 +1,14 @@
 package com.customer.DTO;
 
-
-import com.customer.model.Customer;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 import java.util.Date;
-@Setter
-@Getter
+
+@Data
 public class CustomerDTO
 {
     @NotNull
@@ -59,8 +55,8 @@ public class CustomerDTO
     public void setCommunicationAddress(String communicationAddress) {
         this.communicationAddress = communicationAddress;
     }    public Date getDob() {
-        return dob;
-    }
+    return dob;
+}
 
     public void setDob(Date dob) {
         this.dob = dob;
@@ -129,5 +125,4 @@ public class CustomerDTO
     public void setCustomerId(UUID customerId) {
         this.customerId = customerId;
     }
-
 }

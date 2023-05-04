@@ -8,24 +8,23 @@ import com.customer.model.Telephonebill;
 import com.customer.service.EntityConverter;
 import com.customer.service.CustomerService;
 import com.customer.service.TelephonebillService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.Optional;
 import org.springframework.data.domain.PageRequest;
 
+@RequiredArgsConstructor
 @RequestMapping(path = "/v1/customer")
 @RestController
 public class PhoneBillController {
-    @Autowired
-    TelephonebillService telephonebillService;
-    @Autowired
-    CustomerService customerservice;
+    private final TelephonebillService telephonebillService;
+    private final  CustomerService customerservice;
     @Autowired
     CustomerValaidation customervalidation;
 
@@ -42,9 +41,6 @@ public class PhoneBillController {
                 saveDtoData=telephonebillService.saveOrUpdate(telephonebill);
                 return new ResponseEntity<>(saveDtoData, HttpStatus.OK);
             }
-//            else{
-//                return new ResponseEntity<>(saveDtoData,"Invalid Customer ID!", HttpStatus.OK);
-//            }
         }
         else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -56,8 +52,7 @@ public class PhoneBillController {
             @RequestParam(name = "bill_id") String bill_id,
             @RequestParam(name = "usageInMb") String usageInMb) {
         Optional<Telephonebill> TelephonebillData=telephonebillService.findById(Integer.parseInt(bill_id));
-        TelephonebillDTO updatedDtoData = new TelephonebillDTO();
-
+        TelephonebillDTO updatedDtoData;
         if(TelephonebillData.isPresent()) {
             Telephonebill telephonebillUpdatedData=TelephonebillData.get();
             telephonebillUpdatedData.setUsageInMb(Double.parseDouble(usageInMb));
@@ -69,13 +64,12 @@ public class PhoneBillController {
     }
     @GetMapping(path = "/getCustomerBill")
     public ResponseEntity<Page<Telephonebill>> getAllCustomer(@RequestParam(name = "name") String name,
-                      @RequestParam(name = "bill_date") String bill_date,
-                      final Sort.Direction order,
-                      final int page,
-                      final int size){
+                  @RequestParam(name = "bill_date") String bill_date,
+                  final Sort.Direction order,
+                  final int page,
+                  final int size){
         PageRequest pageRequest = PageRequest.of(page, size, order,"billDate");
         Page<Telephonebill> customer=telephonebillService.findCustomerBill(name,bill_date,pageRequest);
-        System.out.println("SIZE>>"+customer.getTotalElements());
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 }
