@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,13 +29,8 @@ public class UsageController {
     @Autowired
     MonthlyUsageService monthlyUsageService;
     @GetMapping(path = "/getMonthlyUsage")
-    public ResponseEntity<MonthlyUsageDTO> getCustomer(@RequestParam(name = "customerId") String customerId  ){
-        MonthlyUsageDTO monthlyDto = new MonthlyUsageDTO();
-        if(customerId==null) throw new ApiRequestException("customerId not found");
-        Optional<Customer> customer=customerservice.findById(UUID.fromString(customerId));
-        if(customer.isPresent()){
-            monthlyDto=monthlyUsageService.getMonthlydata(customerId);
-        }
+    public ResponseEntity<List<MonthlyUsageDTO>> getCustomer(){
+        List<MonthlyUsageDTO> monthlyDto=monthlyUsageService.getMonthlydata();
         return new ResponseEntity<>(monthlyDto, HttpStatus.OK);
     }
 

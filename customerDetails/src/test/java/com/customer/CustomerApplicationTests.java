@@ -163,19 +163,19 @@ class CustomerApplicationTests {
 	@Test
 	public void testGetMonthlydata() {
 
-		when(telephonebillRepository.findAMonthlyBill(any(UUID.class), anyString(), anyString()))
+		when(telephonebillRepository.findMonthlyBill(anyString(), anyString()))
 				.thenReturn(Collections.singletonList(new Object[]{"VISHNU", 2048, "e5347911-a71a-4fd0-adcc-64e8a48e0dca"}));
 
 		// Call the getMonthlydata() method with a mock customer ID
-		MonthlyUsageDTO result = new MonthlyUsageDTO();
-		result = monthlyUsageService.getMonthlydata("e5347911-a71a-4fd0-adcc-64e8a48e0dca");
+		List<MonthlyUsageDTO> result = new ArrayList<MonthlyUsageDTO>();
+		result = monthlyUsageService.getMonthlydata();
 
 		// Verify the result
-		assertEquals("VISHNU", result.getName());
-		assertEquals(UUID.fromString("e5347911-a71a-4fd0-adcc-64e8a48e0dca"), result.getCustomerId());
-		assertNotNull(result.getFromDate());
-		assertNotNull(result.getAmount());
-		assertNotNull(result.getToDate());
+		assertEquals("VISHNU", result.get(0).getName());
+		assertEquals(UUID.fromString("e5347911-a71a-4fd0-adcc-64e8a48e0dca"), result.get(0).getCustomerId());
+		assertNotNull(result.get(0).getFromDate());
+		assertNotNull(result.get(0).getAmount());
+		assertNotNull(result.get(0).getToDate());
 	}
 
 	private CustomerDTO setCustomerData() {

@@ -26,9 +26,8 @@ public interface TelephonebillRepository extends JpaRepository<Telephonebill, In
 
     @Query(value="SELECT c.name,sum(tel.usage_in_mb),Cast(c.customer_id  as varchar) customer_id FROM telephonebill tel "+
             " join customer c on c.customer_id=tel.customer_id"+
-            " where tel.customer_id=:customerId "+
-            "and bill_date BETWEEN cast(:fromDate as date)  AND cast(:toDate as date) group by c.name,c.customer_id",
+            " where bill_date BETWEEN cast(:fromDate as date)  AND cast(:toDate as date) group by c.name,c.customer_id",
             nativeQuery = true)
-    List<Object[]> findAMonthlyBill(@Param("customerId") UUID customerId,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
+    List<Object[]> findMonthlyBill(@Param("fromDate") String fromDate,@Param("toDate") String toDate);
 
 }
