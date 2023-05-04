@@ -24,7 +24,7 @@ public interface TelephonebillRepository extends JpaRepository<Telephonebill, In
     @Query("SELECT C FROM Telephonebill C ")
     Page<Telephonebill> findAllBill( Pageable pageRequest);
 
-    @Query(value="SELECT c.name,sum(tel.usage_in_mb),c.customer_id FROM telephonebill tel "+
+    @Query(value="SELECT c.name,sum(tel.usage_in_mb),Cast(c.customer_id  as varchar) customer_id FROM telephonebill tel "+
             " join customer c on c.customer_id=tel.customer_id"+
             " where tel.customer_id=:customerId "+
             "and bill_date BETWEEN cast(:fromDate as date)  AND cast(:toDate as date) group by c.name,c.customer_id",

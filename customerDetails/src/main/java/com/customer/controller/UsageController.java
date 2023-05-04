@@ -28,13 +28,12 @@ public class UsageController {
     @Autowired
     MonthlyUsageService monthlyUsageService;
     @GetMapping(path = "/getMonthlyUsage")
-    public ResponseEntity<MonthlyUsageDTO> getCustomer(@RequestParam(name = "customer_id") String customer_id,
-                     @RequestParam(name = "date_from") String date_from, @RequestParam(name = "to_date") String to_date
-                    ){
+    public ResponseEntity<MonthlyUsageDTO> getCustomer(@RequestParam(name = "customerId") String customerId  ){
         MonthlyUsageDTO monthlyDto = new MonthlyUsageDTO();
-        Optional<Customer> customer=customerservice.findById(UUID.fromString(customer_id));
+        if(customerId==null) throw new ApiRequestException("customerId not found");
+        Optional<Customer> customer=customerservice.findById(UUID.fromString(customerId));
         if(customer.isPresent()){
-             monthlyDto=monthlyUsageService.getMonthlydata(customer_id,date_from,to_date);
+            monthlyDto=monthlyUsageService.getMonthlydata(customerId);
         }
         return new ResponseEntity<>(monthlyDto, HttpStatus.OK);
     }
