@@ -1,0 +1,21 @@
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/customer
+    username: postgres
+    password: xminds
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092 #2181
+    consumer:
+      group-id: number-consumer
+    listener:
+      concurrency: 1
+server:
+  port: 8080
+application:
+  properties:
+    topic: RandomNumberTopic
