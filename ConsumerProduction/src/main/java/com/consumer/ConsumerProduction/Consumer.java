@@ -48,7 +48,7 @@ public class Consumer {
 //                 }
              }
              if(flag==0){
-                 System.out.println("Recieved NO::"+part);
+                 System.out.println("Received NO::"+part);
                  Product product=new Product();
                  Date date = new Date();
                  DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
