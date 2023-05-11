@@ -31,21 +31,21 @@ public class Consumer {
          for (String part : parts) {
              int flag=0;
              if(dataobjectlist.size()!=0) {
-//                 Product data = dataobjectlist.stream()
-//                         .filter(product -> part.equals(product.getNumber()))
-//                         .findAny()
-//                         .orElse(null);
-//
-//                 if(data!=null){
-//                     flag=1;
-//                 }
-                 for (Product data : dataobjectlist) {
-                     String no=data.getNumber();
-                     if(data.getNumber().equals(part)) {
-                         flag=1;
-                         break;
-                     }
+                 Product data = dataobjectlist.stream()
+                         .filter(product -> part.equals(product.getNumber()))
+                         .findAny()
+                         .orElse(null);
+
+                 if(data!=null){
+                     flag=1;
                  }
+//                 for (Product data : dataobjectlist) {
+//                     String no=data.getNumber();
+//                     if(data.getNumber().equals(part)) {
+//                         flag=1;
+//                         break;
+//                     }
+//                 }
              }
              if(flag==0){
                  System.out.println("Recieved NO::"+part);
