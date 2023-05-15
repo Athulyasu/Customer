@@ -6,16 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/*
+ *****Redis Controller for view all redis data
+ */
 @RequestMapping(path="/api/v1/redis")
-@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 public class RedisController {
 
     @Autowired
     ProductRepository priductrepo;
     @GetMapping("/redisData")
-    public List<Object> redisData(){
-        return priductrepo.getAll();
+    public List<Product> redisData(){
+        return (List<Product>) priductrepo.findAll();
     }
 }

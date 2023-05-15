@@ -1,19 +1,15 @@
 package com.consumer.ConsumerProduction.configuration;
 
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.RedisURI;
-import io.lettuce.core.api.StatefulRedisConnection;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.consumer.ConsumerProduction.entity.Product;
 
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-
+/*
+ *****redis configuration
+ */
 @Configuration
-@EnableRedisRepositories
 public class RedisConfig {
 
     @Bean
